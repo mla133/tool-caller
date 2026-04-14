@@ -10,7 +10,7 @@ def call_ollama(payload: dict) -> dict:
             headers={"Content-Type": "application/json"},
         )
 
-        with urllib.request.urlopen(req, timeout=30) as response:
+        with urllib.request.urlopen(req, timeout=120) as response:
             return json.loads(response.read().decode("utf-8"))
 
     except urllib.error.URLError as e:
@@ -27,6 +27,9 @@ def call_ollama(payload: dict) -> dict:
 
     except Exception as e:
         raise RuntimeError(
-            f"Unexpected error calling Ollama: {e}"
+            "Ollama timed out while processing the request. \n"
+            "This usually means the model is loading or the system is under load. \n"
+            "Try increasing the timeout or warming up the model."
         )
+
 
