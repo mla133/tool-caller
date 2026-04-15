@@ -10,3 +10,5 @@ def require_env(name: str) -> str:
     return value
 
 NEWS_API_KEY = require_env("NEWS_API_KEY")
+MAX_STEPS = int(require_env("MAX_STEPS"))
+LLM_MODEL = require_env("LLM_MODEL")

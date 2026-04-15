@@ -27,7 +27,7 @@ def resolve_us_location(city: str, state: str) -> dict:
         headers={
             "User-Agent": (
                 "tool-caller-demo/1.0 "
-                "(https://github.com/yourusername/tool-caller)"
+                "(https://github.com/mla133/tool-caller)"
             )
         }
     )

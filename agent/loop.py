@@ -1,14 +1,13 @@
 import json
 from agent.ollama_client import call_ollama
 from tools import TOOL_FUNCTIONS
-
-MAX_STEPS = 6
+from config.env import MAX_STEPS, LLM_MODEL
 
 def run_agent(prompt: str, tool_schemas: list):
     messages = [{"role": "user", "content": prompt}]
 
     payload = {
-        "model": "gemma4:e2b",
+        "model": LLM_MODEL,
         "messages": messages,
         "tools": tool_schemas,
         "stream": False
