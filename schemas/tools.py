@@ -49,5 +49,21 @@ AVAILABLE_TOOLS = [
                 "required": ["lat1", "lon1", "lat2", "lon2"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_forecast_by_coordinates",
+            "description": "Get future weather information such as tomorrow's or upcoming precipitation chances.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "latitude": { "type": "number" },
+                    "longitude": { "type": "number" },
+                    "days": { "type": "integer", "default": 3 }
+                },
+            "required": ["latitude", "longitude"]
+          }
+        }
     }
 ]

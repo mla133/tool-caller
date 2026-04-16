@@ -4,6 +4,7 @@ import urllib.parse
 
 from config.env import NEWS_API_KEY
 
+# Testing get_current_news fold {{{
 def get_current_news(topic: str = None) -> str:
     if topic:
         url = "https://newsapi.org/v2/everything?" + urllib.parse.urlencode({
@@ -27,3 +28,4 @@ def get_current_news(topic: str = None) -> str:
         lines.append(f"{i}. {a['title']} ({a['source']['name']})")
 
     return "\n".join(lines)
+# }}}
