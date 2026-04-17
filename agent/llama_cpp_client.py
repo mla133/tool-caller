@@ -1,40 +1,55 @@
+# agent/llama_cpp_client.py
+
 import json
 import requests
+from config.env import LLAMA_SYSTEM_PROMPT_PATH
 
-def call_llama_cpp(prompt: str, tools: list):
-    system = (
-        "You are a helpful assistant with access to tools.\n\n"
-        "When calling a tool, respond ONLY with JSON:\n"
-        '{ "name": "<tool_name>", "arguments": { ... } }\n'
-        "Do not include any other text.\n"
-        "You may ONLY call tools whose names are listed below."
-        "You must NOT invent new tool names."
-        "If no tool matches exactly, respond with text instead.\n"
-        "Allowed tool names: \n"
-        "- resolve_us_location\n"
-        "- get_weather_by_coordinates\n"
-        "- get_forecast_by_coordinates\n"
-        "- get_current_news\n"
-        "- calculate_distance\n"
-    )
 
-    prompt_text = "SYSTEM:\n" + system + "\nUSER:\n" + prompt + "\nASSISTANT:\n"
+def load_system_prompt() -> str:
+    return LLAMA_SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
 
-    r = requests.post(
+
+SYSTEM_PROMPT = load_system_prompt()
+
+
+def messages_to_prompt(messages: list) -> str:
+    """
+    Convert chat messages into a single text prompt for llama.cpp
+    """
+    parts = ["SYSTEM:\n" + SYSTEM_PROMPT + "\n"]
+
+    for msg in messages:
+        role = msg["role"].upper()
+
+        if role == "TOOL":
+            # Tool result must be visible to the planner
+            parts.append(
+                f"{role} ({msg.get('name')}):\n{msg['content']}\n"
+            )
+        else:
+            parts.append(f"{role}:\n{msg['content']}\n")
+
+    parts.append("ASSISTANT:\n")
+    return "\n".join(parts)
+
+
+def call_llama_cpp(messages: list, tools: list):
+    prompt = messages_to_prompt(messages)
+
+    response = requests.post(
         "http://localhost:8080/completion",
         json={
-            "prompt": prompt_text,
+            "prompt": prompt,
             "temperature": 0.2,
             "n_predict": 1024,
             "stop": ["\nUSER:", "\nSYSTEM:"],
         },
         timeout=120,
     )
-    r.raise_for_status()
+    response.raise_for_status()
 
-    text = r.json().get("content", "").strip()
+    text = response.json().get("content", "").strip()
 
-    # Try to parse tool call
     if text.startswith("{"):
         try:
             data = json.loads(text)

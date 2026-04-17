@@ -3,6 +3,7 @@ AVAILABLE_TOOLS = [
         "type": "function",
         "function": {
             "name": "resolve_us_location",
+            "terminal": False,
             "description": "Resolve a US city and state to latitude and longitude.",
             "parameters": {
                 "type": "object",
@@ -18,6 +19,7 @@ AVAILABLE_TOOLS = [
         "type": "function",
         "function": {
             "name": "get_weather_by_coordinates",
+            "terminal": True,
             "description": "Get weather using latitude and longitude.",
             "parameters": {
                 "type": "object",
@@ -33,6 +35,7 @@ AVAILABLE_TOOLS = [
         "type": "function",
         "function": {
             "name": "get_current_news",
+            "terminal": True,
             "description": "Fetches news articles based on a topic or keyword.",
             "parameters": {
                 "type": "object",
@@ -51,6 +54,7 @@ AVAILABLE_TOOLS = [
         "type": "function",
         "function": {
             "name": "calculate_distance",
+            "terminal": True,
             "description": "Calculate distance between two coordinates.",
             "parameters": {
                 "type": "object",
@@ -72,6 +76,7 @@ AVAILABLE_TOOLS = [
         "type": "function",
         "function": {
             "name": "get_forecast_by_coordinates",
+            "terminal": True,
             "description": "Get future weather information such as tomorrow's or upcoming precipitation chances.",
             "parameters": {
                 "type": "object",
