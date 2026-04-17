@@ -29,6 +29,28 @@ AVAILABLE_TOOLS = [
             }
         }
     },
+     {
+        "type": "function",
+        "function": {
+            "name": "get_current_news",
+            "description": "Fetches news articles based on a topic or keyword.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "topic": {
+                        "type": "string",
+                        "description": "The topic or keyword to search news for."
+                    },
+#                    "limit": {
+#                       "type": "integer",
+#                       "description": "Maximum number of articles to return."
+#                   }
+                },
+                "required": []
+            }
+        }
+    },
+
     {
         "type": "function",
         "function": {
@@ -65,5 +87,5 @@ AVAILABLE_TOOLS = [
             "required": ["latitude", "longitude"]
           }
         }
-    }
+    },
 ]
