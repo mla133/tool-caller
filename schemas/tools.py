@@ -41,10 +41,6 @@ AVAILABLE_TOOLS = [
                         "type": "string",
                         "description": "The topic or keyword to search news for."
                     },
-#                    "limit": {
-#                       "type": "integer",
-#                       "description": "Maximum number of articles to return."
-#                   }
                 },
                 "required": []
             }

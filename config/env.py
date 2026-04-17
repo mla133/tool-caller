@@ -9,6 +9,7 @@ def require_env(name: str) -> str:
         raise RuntimeError(f"Missing required environment variable: {name}")
     return value
 
+LLM_BACKEND = require_env("LLM_BACKEND")
 NEWS_API_KEY = require_env("NEWS_API_KEY")
 MAX_STEPS = int(require_env("MAX_STEPS"))
 LLM_MODEL = require_env("LLM_MODEL")
