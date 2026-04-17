@@ -1,6 +1,7 @@
 import json
 import urllib.request
 import urllib.error
+from config.env import TIMEOUT
 
 def call_ollama(payload: dict) -> dict:
     try:
@@ -10,7 +11,7 @@ def call_ollama(payload: dict) -> dict:
             headers={"Content-Type": "application/json"},
         )
 
-        with urllib.request.urlopen(req, timeout=120) as response:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as response:
             return json.loads(response.read().decode("utf-8"))
 
     except urllib.error.URLError as e:
