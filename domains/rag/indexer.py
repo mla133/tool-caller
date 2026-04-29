@@ -6,12 +6,12 @@ import hashlib
 from pathlib import Path
 from typing import Iterable
 
-from rag.store import VectorStore
-from rag.ollama_client import embed
+from domains.rag.store import VectorStore
+from domains.rag.ollama_client import embed
 
 
-WIKI_ROOT = Path("docs/wiki")
-CHUNK_SIZE = 400  # words
+WIKI_ROOT = Path("wiki")
+CHUNK_SIZE = 100  # words
 
 
 # ------------------------------------------------------------------

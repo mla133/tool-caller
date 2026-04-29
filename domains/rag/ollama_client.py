@@ -1,37 +1,19 @@
-# rag/ollama_client.py
+# domains/rag/ollama_client.py
 import requests
 
-OLLAMA_URL = "http://localhost:8123"
-#OLLAMA_URL = "http://localhost:8080"
+CHAT_BASE = "http://localhost:8123/v1"
+CHAT_MODEL = "qwen2.5-coder-14b-instruct"
 
-def embed(text, model="nomic-embed-text"):
+EMBED_BASE = "http://localhost:8124/v1"
+EMBED_MODEL = "nomic-embed-text"
+
+def embed(text: str) -> list[float]:
     r = requests.post(
-        f"{OLLAMA_URL}/api/embeddings",
-        json={"model": model, "prompt": text},
-        timeout=30,
-    )
-    r.raise_for_status()
-    return r.json()["embedding"]
-
-def chat(prompt, context="", model="gemma4:e2b"):
-    full_prompt = f"""
-You are a personal wiki assistant.
-Use the provided context to answer precisely.
-
-Context:
-{context}
-
-Question:
-{prompt}
-"""
-    r = requests.post(
-        f"{OLLAMA_URL}/api/generate",
+        f"{EMBED_BASE}/embeddings",
         json={
-            "model": model,
-            "prompt": full_prompt,
-            "stream": False,
+            "model": EMBED_MODEL,
+            "input": text,
         },
-        timeout=120,
     )
     r.raise_for_status()
-    return r.json()["response"]
+    return r.json()["data"][0]["embedding"]
