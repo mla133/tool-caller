@@ -67,7 +67,9 @@ The model is memory-mapped directly from the specified file path.
 
 ## 5. Promoting GGUFs Into the Registry
 Recommended approach (copy, not move):
-PowerShellcopy `  $HOME\.cache\huggingface\hub\models--ggml-org--gemma-3-1b-it-GGUF\snapshots\*\*.gguf `  $HOME\llama-registry\models\Show more lines
+```PowerShell
+copy $HOME\.cache\huggingface\hub\models--ggml-org--gemma-3-1b-it-GGUF\snapshots\*\*.gguf $HOME\llama-registry\models\
+```
 After this step, inference should always use -m.
 
 ## 6. Chat Templates (Critical Concept)
@@ -75,11 +77,10 @@ What --chat-template Does
 --chat-template defines how a structured conversation is serialized into raw text
 for the model.
 Without the correct template, instruct/chat models will:
-
-ignore system instructions
-confuse roles
-echo tags
-degrade in output quality
+-ignore system instructions
+-confuse roles
+-echo tags
+-degrade in output quality
 
 Ollama applies templates automatically.
 llama.cpp requires you to specify them explicitly.
@@ -99,24 +100,37 @@ Use evidence, in this order:
 Contains instruct, chat, it → requires a template
 Contains base, pretrain → no chat template
 
-
 ### 2 GGUF Metadata (Authoritative)
-PowerShellllama-cli -m model.gguf --infoShow more lines
+```PowerShell
+llama-cli -m model.gguf --info
+```
 If tokenizer.chat_template or chat_template exists, use it.
 
 ### 3 Base Model Lineage (Most Common Case)
-Base Model FamilyChat TemplateLLaMA‑3 Instructllama-3LLaMA‑2 Chatllama-2Mistral / MixtralmistralGemma‑ITgemmaQwen / Yi / Phi / DeepSeekchatml
+| Base Model Family    | Chat Template |
+| -------------------- | ------------- |
+| LLaMA‑3 Instruct     | llama-3       | 
+| LLaMA‑2 Chat         | llama-2       |
+| Mistral/Mixtral      | mistral       | 
+| Gemma‑IT             | gemma         | 
+| Qwen/Yi/Phi/DeepSeek | chatml        | 
 
 ### 4 Prompt Examples in Model Card
 Prompt format shown in documentation is almost always the correct template.
 
 ### 5 Empirical Test (Last Resort)
-PowerShellllama-cli -m model.gguf --chat-template llama-3 -p "Say OK" -n 5llama-cli -m model.gguf --chat-template chatml  -p "Say OK" -n 5llama-cli -m model.gguf --chat-template mistral -p "Say OK" -n 5Show more lines
+```PowerShell
+llama-cli -m model.gguf --chat-template llama-3 -p "Say OK" -n 5
+llama-cli -m model.gguf --chat-template chatml  -p "Say OK" -n 5
+llama-cli -m model.gguf --chat-template mistral -p "Say OK" -n 5
+```
 Correct template produces short, clean output with no role leakage.
 
 ## 9. Ollama‑Like Registry (registry.json)
 Example:
-JSON{  "models": {    "llama3": {      "file": "llama-3-8b-instruct.Q4_K_M.gguf",      "template": "llama-3",      "ctx": 8192,      "ngl": 999,      "description": "LLaMA 3 8B Instruct"    },    "gemma3": {      "file": "gemma-3-1b-it.Q4_K_M.gguf",      "template": "gemma",      "ctx": 8192,      "ngl": 999,      "description": "Gemma 3 1B IT"    }  }}Show more lines
+```JSON
+{  "models": {    "llama3": {      "file": "llama-3-8b-instruct.Q4_K_M.gguf",      "template": "llama-3",      "ctx": 8192,      "ngl": 999,      "description": "LLaMA 3 8B Instruct"    },    "gemma3": {      "file": "gemma-3-1b-it.Q4_K_M.gguf",      "template": "gemma",      "ctx": 8192,      "ngl": 999,      "description": "Gemma 3 1B IT"    }  }}
+```
 
 ## 10. Ollama‑Like llama Wrapper CLI
 Supported commands:
