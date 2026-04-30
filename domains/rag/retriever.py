@@ -1,5 +1,5 @@
 # domains/rag/retriever.py
-from domains.rag.ollama_client import embed
+from domains.rag.llm_client import embed
 from domains.rag.store import VectorStore
 
 def retrieve(question, k=5):

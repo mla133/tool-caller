@@ -37,7 +37,7 @@ def call_llama_cpp(messages: list, tools: list):
     prompt = messages_to_prompt(messages)
 
     response = requests.post(
-        "http://localhost:8080/completion",
+        "http://localhost:8123/v1/completions",
         json={
             "prompt": prompt,
             "temperature": 0.2,

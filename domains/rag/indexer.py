@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Iterable
 
 from domains.rag.store import VectorStore
-from domains.rag.ollama_client import embed
+from domains.rag.llm_client import embed
 
 
 WIKI_ROOT = Path("wiki")

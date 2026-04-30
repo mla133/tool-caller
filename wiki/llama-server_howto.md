@@ -1,15 +1,15 @@
 # llama-server CLI howto notes/instructions
 
 ## Invoking the embeddings to use GPU
+In the ~/models directory:
 ```
 ./llama-server \
-
-  -m models/nomic-embed-text-v1.5.Q4_K_M.gguf \
+  -m nomic-embed-text-v1.5.Q4_K_M.gguf \
   --port 8124 \
   --host 127.0.0.1 \
   --embedding \
   -ngl 99 \
-  --dev Vulkan0
+  -sm none
 ```
 ## Test using Powershell
 ```PowerShell

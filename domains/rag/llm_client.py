@@ -1,4 +1,4 @@
-# domains/rag/ollama_client.py
+# domains/rag/llm_client.py
 import requests
 
 CHAT_BASE = "http://localhost:8123/v1"
