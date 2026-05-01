@@ -25,35 +25,25 @@ class LlamaServerAdapter(LLMAdapter):
         self.n_predict = n_predict
         self.temperature = temperature
 
-    def build_prompt(
-        self,
-        messages: List[Message],
-        tools: List[ToolSchema],
-    ) -> str:
-        tool_block = json.dumps(tools, indent=2)
+    def build_prompt(self, messages, tools) -> str:
+        parts = []
 
-        convo = "\n".join(
-            f"{m['role'].upper()}: {m['content']}"
-            for m in messages
+        parts.append(
+            "You are a helpful assistant. Answer the user clearly and directly.\n"
         )
 
-        return f"""You are a tool-calling assistant.
+        for m in messages:
+            if m["role"] == "user":
+                parts.append(f"### User\n{m['content']}\n")
+            elif m["role"] == "assistant":
+                parts.append(f"### Assistant\n{m['content']}\n")
+            elif m["role"] == "tool":
+                parts.append(f"### Tool\n{m['content']}\n")
 
-TOOLS:
-{tool_block}
+        # 🔑 This line is critical
+        parts.append("### Assistant\n")
 
-RULES:
-- If calling a tool, output ONLY:
-  <tool_call>
-  {{ "tool": "...", "args": {{...}} }}
-  </tool_call>
-
-- Otherwise return normal assistant text.
-
-{convo}
-
-ASSISTANT:
-"""
+        return "\n".join(parts)
 
     def generate(self, prompt: str) -> str:
         response = requests.post(
@@ -63,12 +53,20 @@ ASSISTANT:
                 "prompt": prompt,
                 "n_predict": self.n_predict,
                 "temperature": self.temperature,
-                "stop": ["USER:", "</tool_call>"],
             },
-            timeout=60,
+            timeout=120,
         )
+
         response.raise_for_status()
-        return response.json()["content"]
+        data = response.json()
+
+        raw = data.get("content", "")
+
+        # Strip echoed prompt/history
+        if "### Assistant" in raw:
+            raw = raw.split("### Assistant")[-1]
+
+        return raw.strip()
 
     def extract_tool_call(self, output: str) -> Dict[str, Any] | None:
         match = _TOOL_RE.search(output)

@@ -28,13 +28,6 @@ class Agent:
         })
 
     def step(self) -> str:
-        """
-        Execute a single agent step:
-        - build prompt
-        - generate output
-        - detect tool call
-        - execute tool if requested
-        """
         prompt = self.llm.build_prompt(
             messages=self.messages,
             tools=self.tools,
@@ -42,19 +35,25 @@ class Agent:
 
         output = self.llm.generate(prompt)
 
-        tool_call = self.llm.extract_tool_call(output)
-        if tool_call is not None:
-            result = self._run_tool(tool_call)
+        # ---- NEW: handle empty / weak model output ----
+        if not output or not output.strip():
+            placeholder = "(model returned empty continuation)"
+            self.messages.append({
+                "role": "assistant",
+                "content": placeholder,
+            })
+            return placeholder
+        # -----------------------------------------------
 
-            # feed tool result back into context
+        tool_call = self.llm.extract_tool_call(output)
+        if tool_call:
+            result = self._run_tool(tool_call)
             self.messages.append({
                 "role": "tool",
                 "content": result,
             })
-
             return result
 
-        # normal assistant response
         self.messages.append({
             "role": "assistant",
             "content": output,

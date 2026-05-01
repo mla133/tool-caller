@@ -36,7 +36,7 @@ def parse_args():
     )
 
     # ---------- Common ----------
-    for p in (ollama, llama_cli, llama_server):
+    for p in (ollama, llama_server):
         p.add_argument(
             "--temperature",
             type=float,
