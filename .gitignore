@@ -20,5 +20,5 @@ knowledge.db
 .idea/
 
 # Environment/Cache Files
-*.json
+*cache*.json
 .env
