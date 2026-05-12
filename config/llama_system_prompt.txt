@@ -15,7 +15,7 @@ TOOL CALL FORMAT:
 }
 
 ALLOWED TOOL NAMES:
-- resolve_us_location
+- resolve_location
 - get_weather_by_coordinates
 - get_forecast_by_coordinates
 - get_current_news
@@ -23,7 +23,7 @@ ALLOWED TOOL NAMES:
 
 IMPORTANT WORKFLOWS:
 - To answer weather questions about a city:
-  1. Call resolve_us_location(city, state)
+  1. Call resolve_location(city, state)
   2. Then call get_weather_by_coordinates(latitude, longitude)
 
 If your tool call is rejected, read the rejection reason and propose a corrected tool call.

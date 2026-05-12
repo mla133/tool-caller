@@ -2,7 +2,7 @@ AVAILABLE_TOOLS = [
     {
         "type": "function",
         "function": {
-            "name": "resolve_us_location",
+            "name": "resolve_location",
             "terminal": False,
             "description": "Resolve a US city and state to latitude and longitude.",
             "parameters": {
