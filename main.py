@@ -3,7 +3,7 @@
 import argparse
 
 from agent.agent import Agent
-from tools.registry import TOOL_SCHEMAS
+from tools.registry import TOOL_SCHEMAS, TOOL_FUNCTIONS
 
 from llm.ollama import OllamaAdapter
 from llm.llamaserver import LlamaServerAdapter

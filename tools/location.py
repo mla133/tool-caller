@@ -8,7 +8,7 @@ from cache.location_cache import load_cache, save_cache
 
 _LOCATION_CACHE = load_cache()
 
-def resolve_us_location(city: str, state: str) -> dict:
+def resolve_location(city: str, state: str) -> dict:
     key = f"{city.lower()},{state.upper()}"
 
     if key in _LOCATION_CACHE:
